@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: insightpilot-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: insightpilot
+      POSTGRES_PASSWORD: insightpilot
+      POSTGRES_DB: insightpilot
+    volumes:
+      - insightpilot_pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U insightpilot -d insightpilot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: insightpilot-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+psycopg2://insightpilot:insightpilot@postgres:5432/insightpilot
+      # Optional: set to enable real LLM-generated explanations.
+      # Leave blank to use the built-in template explanation engine (no cost, no key needed).
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    volumes:
+      - insightpilot_models:/app/ml_artifacts
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  frontend:
+    build: ./frontend
+    container_name: insightpilot-frontend
+    restart: unless-stopped
+    environment:
+      BACKEND_URL: http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "8501:8501"
+
+volumes:
+  insightpilot_pgdata:
+  insightpilot_models:

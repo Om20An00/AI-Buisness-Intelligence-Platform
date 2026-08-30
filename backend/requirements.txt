@@ -1,0 +1,13 @@
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+sqlalchemy==2.0.52
+psycopg2-binary==2.9.12
+pandas==3.0.2
+numpy==2.4.4
+scikit-learn==1.8.0
+xgboost==3.4.1
+Faker==40.37.0
+joblib==1.5.3
+pydantic==2.13.5
+python-dotenv==1.2.2
+openai==3.6.0

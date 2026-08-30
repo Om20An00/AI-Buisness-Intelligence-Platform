@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: insightpilot-backend
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+    healthCheckPath: /health
+
+  - type: web
+    name: insightpilot-frontend
+    runtime: docker
+    rootDir: frontend
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: BACKEND_URL
+        fromService:
+          name: insightpilot-backend
+          type: web
+          property: hostport
