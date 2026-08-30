@@ -2,6 +2,7 @@ services:
   - type: web
     name: insightpilot-backend
     runtime: docker
+    plan: free
     rootDir: backend
     dockerfilePath: ./Dockerfile
     envVars:
@@ -14,6 +15,7 @@ services:
   - type: web
     name: insightpilot-frontend
     runtime: docker
+    plan: free
     rootDir: frontend
     dockerfilePath: ./Dockerfile
     envVars:
