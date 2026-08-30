@@ -20,7 +20,4 @@ services:
     dockerfilePath: ./Dockerfile
     envVars:
       - key: BACKEND_URL
-        fromService:
-          name: insightpilot-backend
-          type: web
-          property: hostport
+        value: https://insightpilot-backend-esoq.onrender.com
