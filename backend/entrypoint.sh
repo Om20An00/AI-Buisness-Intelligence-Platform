@@ -31,4 +31,4 @@ python3 -m app.ml.churn_model
 python3 -m app.ml.demand_model
 
 echo "[entrypoint] Starting API server..."
-exec uvicorn app.main:app --host 0.0.0.0 --port 8000
+exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
