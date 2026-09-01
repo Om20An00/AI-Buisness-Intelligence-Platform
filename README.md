@@ -31,7 +31,7 @@
 
 ## 📖 About This Project
 
-An **AI Decision Intelligence Platform** — the kind of internal tool a data
+An **AI Buisness Intelligence Platform** — the kind of internal tool a data
 analytics team builds for a business stakeholder who doesn't write SQL. Ask a
 question in plain English, and the system routes it to the right engine: a
 SQL query, an ML churn prediction, or a demand forecast — then returns the
