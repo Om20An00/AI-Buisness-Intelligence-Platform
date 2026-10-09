@@ -48,7 +48,7 @@ docs at `/docs`) that's the engine's working name, not a separate product.
 ---
 
 
-## 📸 Screenshots
+## 📸 Demo Pics
 
 <div align="center">
 
