@@ -23,7 +23,7 @@
 
 ### 🔗 [**Live Demo — insightpilot-frontend.onrender.com**](https://insightpilot-frontend.onrender.com/)
 
-<sub>⏳ Hosted on Render's free tier — spins down after inactivity, first load may take ~50s to wake up</sub>
+<sub>⏳ Hosted on Render's free tier spins down after inactivity, first load may take ~50s to wake up</sub>
 
 </div>
 
@@ -31,21 +31,44 @@
 
 ## 📖 About This Project
 
-An **AI Business Intelligence Platform** — the kind of internal tool a data
+An **AI Business Intelligence Platform** the kind of internal tool a data
 analytics team builds for a business stakeholder who doesn't write SQL. Ask a
 question in plain English, and the system routes it to the right engine: a
-SQL query, an ML churn prediction, or a demand forecast — then returns the
+SQL query, an ML churn prediction, or a demand forecast then returns the
 data, a plain-English insight, and a concrete recommendation.
 
 Internally the backend service is titled `InsightPilot` (visible in the API
-docs at `/docs`) — that's the engine's working name, not a separate product.
+docs at `/docs`) that's the engine's working name, not a separate product.
 
-> 🧠 **Author's note:** Designed and built end-to-end by me — data model,
+> 🧠 **Author's note:** Designed and built end-to-end by me data model,
 > synthetic dataset generation, two trained ML models, the natural-language
-> routing agent, the API, the dashboard, and the live deployment — as a
+> routing agent, the API, the dashboard, and the live deployment as a
 > hands-on project applying analytics engineering + applied ML together.
 
 ---
+
+
+## 📸 Screenshots
+
+<div align="center">
+
+| Home Page | Dashboard |
+|:---:|:---:|
+| <img src="https://raw.githubusercontent.com/Om20An00/AI-Buisness-Intelligence-Platform/c24109013b1fd6465310d29336754850bdca9302/Demo-pics/Home%20Page.png" width="400"/> | <img src="https://raw.githubusercontent.com/Om20An00/AI-Buisness-Intelligence-Platform/c24109013b1fd6465310d29336754850bdca9302/Demo-pics/Dashboard.png" width="400"/> |
+
+| Query Result | Churn Risk |
+|:---:|:---:|
+| <img src="https://raw.githubusercontent.com/Om20An00/AI-Buisness-Intelligence-Platform/c24109013b1fd6465310d29336754850bdca9302/Demo-pics/Query%20Result.png" width="400"/> | <img src="https://raw.githubusercontent.com/Om20An00/AI-Buisness-Intelligence-Platform/c24109013b1fd6465310d29336754850bdca9302/Demo-pics/Churn%20Risk.png" width="400"/> |
+
+| Churn Explorer | Demand Forecast |
+|:---:|:---:|
+| <img src="https://raw.githubusercontent.com/Om20An00/AI-Buisness-Intelligence-Platform/c24109013b1fd6465310d29336754850bdca9302/Demo-pics/Churn%20Explorer.png" width="400"/> | <img src="https://raw.githubusercontent.com/Om20An00/AI-Buisness-Intelligence-Platform/c24109013b1fd6465310d29336754850bdca9302/Demo-pics/Demand%20Forecast.png" width="400"/> |
+
+</div>
+
+---
+
+
 
 ## 🏗️ Architecture
 
@@ -71,14 +94,14 @@ flowchart TB
 
 | Category | What's Implemented |
 |---|---|
-| **NL Agent** | Regex/keyword-based intent classifier — routes a question to SQL, churn, or forecasting instantly, with zero LLM cost |
+| **NL Agent** | Regex/keyword-based intent classifier routes a question to SQL, churn, or forecasting instantly, with zero LLM cost |
 | **SQL Analytics** | Parameterized queries for revenue, top customers, product performance, and stock levels |
-| **Churn Prediction** | XGBoost classifier trained on tenure, spend, support tickets, recent order activity — **0.95 holdout AUC** |
+| **Churn Prediction** | XGBoost classifier trained on tenure, spend, support tickets, recent order activity **0.95 holdout AUC** |
 | **Explainability** | Per-customer top risk factors, computed relative to the customer base (no black box) |
-| **Demand Forecasting** | XGBoost regressor with lag/rolling/seasonal features, walk-forward daily forecasts — **~3 units/day MAE** |
+| **Demand Forecasting** | XGBoost regressor with lag/rolling/seasonal features, walk-forward daily forecasts **~3 units/day MAE** |
 | **Insight Generation** | Deterministic template engine by default (zero cost); optional real LLM call via OpenAI, with automatic fallback |
 | **Recommendation Engine** | Rule-based, transparent, auditable business actions — retention outreach, reorder quantities, etc. |
-| **Dashboard** | Streamlit — chat interface, KPI dashboard, churn explorer, forecast explorer |
+| **Dashboard** | Streamlit chat interface, KPI dashboard, churn explorer, forecast explorer |
 | **Deployment** | Docker Compose locally; Render (web services) + Neon (serverless Postgres) in production |
 
 ---
@@ -135,7 +158,7 @@ docker compose up --build
 | `backend` | http://localhost:8000/docs | FastAPI — agent, ML models, analytics |
 | `frontend` | http://localhost:8501 | Streamlit dashboard + chat UI |
 
-First boot takes ~30–60s — the backend waits for Postgres, seeds a synthetic
+First boot takes ~30–60s the backend waits for Postgres, seeds a synthetic
 dataset (600 customers, 16 products, ~14k orders with a year of demand
 history), then trains both ML models before serving traffic. It's idempotent,
 so subsequent runs start instantly.
@@ -179,7 +202,7 @@ curl http://localhost:8000/api/dashboard/kpis
 
 ---
 
-## ☁️ Live Deployment — Render + Neon
+## ☁️ Live Deployment Render + Neon
 
 The platform is deployed as two Render web services backed by a serverless
 Neon PostgreSQL database:
@@ -191,8 +214,8 @@ Neon PostgreSQL database:
 | **Frontend** | Render free web service (Docker), Streamlit |
 | **Backend** | Render free web service (Docker), FastAPI, binds to Render's injected `$PORT` |
 | **Database** | Neon serverless Postgres (free tier, sleeps when idle, wakes on connect) |
-| **AI Explanation** | Runs in offline/template mode by default — no OpenAI key configured in production |
-| **Cost** | $0 — entirely on free tiers |
+| **AI Explanation** | Runs in offline/template mode by default no OpenAI key configured in production |
+| **Cost** | $0 entirely on free tiers |
 
 > Note: free-tier web services spin down after inactivity; the first request
 > after idle can take up to ~50 seconds to wake both services back up.
@@ -207,26 +230,26 @@ Neon PostgreSQL database:
 from a documented logistic-style rule (tenure, spend, support tickets +
 noise); demand volumes are generated with trend + weekly + monthly
 seasonality baked in mathematically, so the models have genuine signal to
-learn from — not just noise. Fully disclosed in `backend/app/seed_data.py`.
+learn from not just noise. Fully disclosed in `backend/app/seed_data.py`.
 
 **AI Analytics Agent.** A lightweight regex/keyword intent classifier
 (`backend/app/agent/intent_classifier.py`). No LLM call needed to route a
 question — instant and free.
 
-**ML Prediction — Churn.** XGBoost classifier trained on tenure, spend,
+**ML Prediction Churn.** XGBoost classifier trained on tenure, spend,
 support tickets, and recent order activity. Holdout AUC ≈ 0.95. Each
 prediction includes the top contributing risk factors, computed relative to
 the customer base.
 
-**Forecasting — Demand.** XGBoost regressor trained on lagged/rolling/
+**Forecasting Demand.** XGBoost regressor trained on lagged/rolling/
 seasonal features. Forecasts forward day-by-day using a walk-forward
-approach — each prediction feeds back in as the next day's lag feature.
+approach each prediction feeds back in as the next day's lag feature.
 
 **Insight Generation & Recommendations.** The insight layer works fully
-offline by default via deterministic templates — zero external cost. Setting
+offline by default via deterministic templates zero external cost. Setting
 `OPENAI_API_KEY` enables real LLM-generated explanations, with automatic
 fallback if that call fails. The recommendation engine is intentionally
-rule-based (not another LLM call) for transparency — every suggestion traces
+rule-based (not another LLM call) for transparency every suggestion traces
 to a specific, auditable rule.
 
 </details>
@@ -267,25 +290,6 @@ AI-Buisness-Intelligence-Platform/
 
 ---
 
-## 📸 Screenshots
-
-<div align="center">
-
-| Home Page | Dashboard |
-|:---:|:---:|
-| <img src="https://raw.githubusercontent.com/Om20An00/AI-Buisness-Intelligence-Platform/c24109013b1fd6465310d29336754850bdca9302/Demo-pics/Home%20Page.png" width="400"/> | <img src="https://raw.githubusercontent.com/Om20An00/AI-Buisness-Intelligence-Platform/c24109013b1fd6465310d29336754850bdca9302/Demo-pics/Dashboard.png" width="400"/> |
-
-| Query Result | Churn Risk |
-|:---:|:---:|
-| <img src="https://raw.githubusercontent.com/Om20An00/AI-Buisness-Intelligence-Platform/c24109013b1fd6465310d29336754850bdca9302/Demo-pics/Query%20Result.png" width="400"/> | <img src="https://raw.githubusercontent.com/Om20An00/AI-Buisness-Intelligence-Platform/c24109013b1fd6465310d29336754850bdca9302/Demo-pics/Churn%20Risk.png" width="400"/> |
-
-| Churn Explorer | Demand Forecast |
-|:---:|:---:|
-| <img src="https://raw.githubusercontent.com/Om20An00/AI-Buisness-Intelligence-Platform/c24109013b1fd6465310d29336754850bdca9302/Demo-pics/Churn%20Explorer.png" width="400"/> | <img src="https://raw.githubusercontent.com/Om20An00/AI-Buisness-Intelligence-Platform/c24109013b1fd6465310d29336754850bdca9302/Demo-pics/Demand%20Forecast.png" width="400"/> |
-
-</div>
-
----
 
 ## 🔮 Roadmap / Future Enhancements
 
@@ -318,7 +322,7 @@ an issue first to discuss what you'd like to change.
 
 ## 👤 Author
 
-**Om** — [@Om20An00](https://github.com/Om20An00)
+**Om** [@Om20An00](https://github.com/Om20An00)
 
 This project, including its data model, ML pipeline, agent design, API, and
 live deployment, was designed and built entirely by me as an independent,
